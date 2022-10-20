@@ -44,46 +44,50 @@ int rightChild(int i)
 }
 
 //5.heapify
-void heapify(int arr[], int i)
+void heapify(int arr[], int size, int i)
 {
-    int l = leftChild(i);
-    int r = rightChild(i);
-    int min = i;
-    if(l != -1 &&l < size && arr[l] < arr[i])
+    if(size >= 2)
     {
-        min = l;
-    }
-    if(r != -1 && r < size && arr[r] < arr[i])
-    {
-        min = r;
-    }
-    if(min != i)
-    {
-        swap(&arr[i], &arr[min]);
-        heapify(arr, min);
+        int l = leftChild(i);
+        int r = rightChild(i);
+        int min = i;
+        if(l != -1 && l < size && arr[l] < arr[i])
+        {
+            min = l;
+        }
+        if(r != -1 && r < size && arr[r] < arr[i])
+        {
+            min = r;
+        }
+        if(min != i)
+        {
+            swap(&arr[i], &arr[min]);
+            heapify(arr,size, min);
+        }
     }
 }
 
 //6. Min-Heap
-void minHeap(int arr[])
+void minHeap(int arr[], int size)
 {
     if(size >= 2)
     {
         for(int i = (size -1)/2; i >= 0; i--)
         {
-            heapify(arr,i);
+            heapify(arr,size, i);
         }
     }
 }
 //7. Extraction of root
 int extract(int arr[])
 {
-     
-    swap(&arr[size - 1] , &arr[0]);
-    size--;
-    heapify(arr, 0);
-    
-    return arr[size - 1];
+    if(size >= 1){
+        int temp = arr[0];
+        swap(&arr[size - 1] , &arr[0]);
+        size--;
+        heapify(arr,size, 0);
+        return temp;
+    }
 }
 
 //8.Insertion
@@ -100,12 +104,12 @@ void insert(int arr[], int num)
         size++;
         for(int i = (size - 1)/2; i >= 0; i--)
         {
-            heapify(arr, i);
+            heapify(arr,size, i);
         }
     }
 }
 // imp function( Solution )
-int minCost(int arr[], int size)
+int minCost(int arr[])
 {
     int cost = 0;
     /*
@@ -117,7 +121,7 @@ int minCost(int arr[], int size)
         3. Insert the sum.
     2. return arr[0]
     */
-   minHeap(arr);
+   minHeap(arr, size);
    while(size > 1)
    {
         int min1 = extract(arr);
@@ -145,6 +149,6 @@ int main(void)
         scanf("%d",&heap[i]);
     }
 
-    printf("\n\nThe minimum cost of joining the ropes is %d", minCost(heap,n));
+    printf("\n\nThe minimum cost of joining the ropes is %d", minCost(heap));
     return 0;
 }
